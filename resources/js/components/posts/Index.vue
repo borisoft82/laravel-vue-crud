@@ -1,5 +1,5 @@
   <template>
-    <div>
+    <div class="container">
       <table class="table">
         <thead>
           <tr>
@@ -11,7 +11,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="post in posts" :key="post.id">
+          <tr v-for="post in posts.data" :key="post.id">
             <td>{{post.id}}</td>
             <td>{{post.title}}</td>
             <td>{{post.text}}</td>
@@ -20,21 +20,35 @@
           </tr>
         </tbody>
       </table>
+      <pagination :data="posts" @pagination-change-page="getResults"></pagination>
     </div>
 </template>
 
 <script>
+  import pagination from 'laravel-vue-pagination';
+
   export default {
+    components:{
+            pagination
+        },
+
     data() {
       return {
-        posts: []
+        posts: {}
       }
     },
 
     mounted() {
-      axios.get('/api/posts').then(response => {
-        this.posts = response.data.data;
-      });
+      this.getResults();
+    },
+
+    methods: {
+      getResults(page = 1) {
+        axios.get('/api/posts?page=' + page)
+          .then(response => {
+            this.posts = response.data;
+          });
     }
+  }
   }
 </script>
