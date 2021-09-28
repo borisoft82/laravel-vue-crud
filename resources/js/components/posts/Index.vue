@@ -9,11 +9,32 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">#ID</th>
-            <th scope="col">Title</th>
-            <th scope="col">Text</th>
-            <th scope="col">Created</th>
-            <th scope="col">Updated</th>
+            <th scope="col">
+              <a href="#" @click.prevent="changeSort('id')">#ID</a>
+              <span v-if="sort_field == 'id' && sort_order == 'asc'">&uarr;</span>
+              <span v-if="sort_field == 'id' && sort_order == 'desc'">&darr;</span>
+            </th>
+            <th scope="col">
+              <a href="#" @click.prevent="changeSort('title')">Title</a>
+              <span v-if="sort_field == 'title' && sort_order == 'asc'">&uarr;</span>
+              <span v-if="sort_field == 'title' && sort_order == 'desc'">&darr;</span>
+            </th>
+            <th scope="col">
+              <a href="#" @click.prevent="changeSort('text')">Text</a>
+              <span v-if="sort_field == 'text' && sort_order == 'asc'">&uarr;</span>
+              <span v-if="sort_field == 'text' && sort_order == 'desc'">&darr;</span>
+            </th>
+            <th scope="col">
+              <a href="#" @click.prevent="changeSort('created_at')">Created</a>
+              <span v-if="sort_field == 'created_at' && sort_order == 'asc'">&uarr;</span>
+              <span v-if="sort_field == 'created_at' && sort_order == 'desc'">&darr;</span>
+            </th>
+            <th scope="col">
+              <a href="#" @click.prevent="changeSort('updated_at')">Updated</a>
+              <span v-if="sort_field == 'updated_at' && sort_order == 'asc'">&uarr;</span>
+              <span v-if="sort_field == 'updated_at' && sort_order == 'desc'">&darr;</span>
+            </th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -23,6 +44,7 @@
             <td>{{post.text}}</td>
             <td>{{post.created_at}}</td>
             <td>{{post.updated_at}}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -42,7 +64,9 @@
       return {
         posts: {},
         categories: {},
-        category_id: ''
+        category_id: '',
+        sort_field: 'created_at',
+        sort_order: 'desc'
       }
     },
 
@@ -59,7 +83,10 @@
 
     methods: {
       getResults(page = 1) {
-        axios.get('/api/posts?page=' + page + '&category_id=' + this.category_id)
+        axios.get('/api/posts?page=' + page 
+        + '&category_id=' + this.category_id 
+        + '&sort_field=' + this.sort_field 
+        + '&sort_order=' + this.sort_order)
           .then(response => {
             this.posts = response.data;
           });
@@ -70,6 +97,16 @@
           .then(response => {
             this.categories = response.data.data;
           });
+    },
+
+    changeSort(field) {
+      if(this.sort_field === field) {
+        this.sort_order = this.sort_order === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.sort_field = field;
+        this.sort_order = 'asc';
+      }
+      this.getResults();
     }
   }
 }
