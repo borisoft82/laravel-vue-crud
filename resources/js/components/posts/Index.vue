@@ -6,7 +6,7 @@
           {{ category.name}}
         </option>
       </select>
-      <table class="table">
+      <table class="table mt-3">
         <thead>
           <tr>
             <th scope="col">
