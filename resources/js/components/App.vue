@@ -13,10 +13,20 @@
                         <ul class="navbar-nav mr-auto">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item">
-                                    <router-link :to="{ name: 'posts.index' }" class="nav-link">Posts</router-link>
+                                    <router-link 
+                                        active-class="active-item" 
+                                        exact 
+                                        :to="{ name: 'posts.index' }" 
+                                        class="nav-link">Posts
+                                    </router-link>
                                 </li>
                                 <li class="nav-item">
-                                  <router-link :to="{ name: 'posts.create' }" class="nav-link">Add new post</router-link>
+                                    <router-link 
+                                    active-class="active-item" 
+                                    exact 
+                                    :to="{ name: 'posts.create' }" 
+                                    class="nav-link">Add new post
+                                    </router-link>
                                 </li>
                               </ul>
                         </ul>
