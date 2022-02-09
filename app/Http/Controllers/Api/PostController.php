@@ -13,6 +13,7 @@ class PostController extends Controller
     public function index()
     {
         $sortField = request('sort_field', 'created_at');
+  
         if(!in_array($sortField, ['id', 'title', 'text', 'created_at', 'updated_at'])) {
             $sortField = 'created_at';
         }
@@ -32,6 +33,16 @@ class PostController extends Controller
     public function store(PostRequest $postRequest) {
         $post = Post::create($postRequest->validated());
         
+        return new PostResource($post);
+    }
+
+    public function show(Post $post) {
+        return new PostResource($post);
+    }
+
+    public function update(Post $post, PostRequest $postRequest) {
+        $post->update($postRequest->validated());
+
         return new PostResource($post);
     }
 }

@@ -34,6 +34,7 @@
               <span v-if="sort_field == 'updated_at' && sort_order == 'asc'">&uarr;</span>
               <span v-if="sort_field == 'updated_at' && sort_order == 'desc'">&darr;</span>
             </th>
+            <th scope="col">Category</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -44,7 +45,8 @@
             <td>{{post.text}}</td>
             <td>{{post.created_at}}</td>
             <td>{{post.updated_at}}</td>
-            <td></td>
+            <td>{{post.category_name}}</td>
+            <td><router-link :to="{ name: 'posts.edit', params: { id: post.id} }">Edit</router-link></td>
           </tr>
         </tbody>
       </table>

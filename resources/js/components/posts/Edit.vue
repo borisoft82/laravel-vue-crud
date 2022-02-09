@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Create</h1>
+      <h1>Edit</h1>
       <form @submit.prevent="savePost">
         <div class="form-group">
           <label>Title</label>
@@ -51,16 +51,20 @@
     },
 
     mounted() {
-      axios.get('api/categories')
+      axios.get('/api/categories')
         .then(response => {
           this.categories = response.data.data
+      }),
+      axios.get('/api/posts/' + this.$route.params.id)
+        .then(response => {
+          this.fields = response.data.data
       })
     },
 
     methods: {
       savePost() {
         this.submitting = true;
-        axios.post('api/posts', this.fields)
+        axios.put('/api/posts/' + this.$route.params.id, this.fields)
           .then(response => {
             this.$router.push('/');
             this.submitting = false;
