@@ -62,10 +62,20 @@
         this.submitting = true;
         axios.post('api/posts', this.fields)
           .then(response => {
-            this.$router.push('/');
+            this.$swal({
+              icon: 'success',
+              title: 'Post: ' + this.fields.title,
+              text: 'Successfully saved'
+            });
+              this.$router.push('/');
             this.submitting = false;
         }).catch(error => {
           if(error.response.status === 422) {
+            this.$swal({
+                icon: 'error',
+                title: 'Validation error',
+                text: 'Required fields can not be empty!'
+            });
             this.errors = error.response.data.errors;
           }
           this.submitting = false;

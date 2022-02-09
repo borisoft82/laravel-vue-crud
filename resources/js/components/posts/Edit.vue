@@ -38,7 +38,7 @@
 
   export default {
     data() {
-      return {
+        return {
         categories: {},
         fields: {
           title: '',
@@ -66,10 +66,20 @@
         this.submitting = true;
         axios.put('/api/posts/' + this.$route.params.id, this.fields)
           .then(response => {
+            this.$swal({
+                icon: 'success',
+                title: 'Post: ' + this.fields.title,
+                text: 'Successfully updated'
+            });
             this.$router.push('/');
             this.submitting = false;
         }).catch(error => {
           if(error.response.status === 422) {
+              this.$swal({
+                icon: 'error',
+                title: 'Validation error',
+                text: 'Required fields can not be empty!'
+            });
             this.errors = error.response.data.errors;
           }
           this.submitting = false;
