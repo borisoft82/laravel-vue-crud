@@ -2110,7 +2110,8 @@ __webpack_require__.r(__webpack_exports__);
         text: '',
         category_id: ''
       },
-      errors: {}
+      errors: {},
+      submitting: false
     };
   },
   mounted: function mounted() {
@@ -2124,11 +2125,15 @@ __webpack_require__.r(__webpack_exports__);
     savePost: function savePost() {
       var _this2 = this;
 
+      this.submitting = true;
       axios.post('api/posts', this.fields).then(function (response) {
         _this2.$router.push('/');
+
+        _this2.submitting = false;
       })["catch"](function (error) {
         if (error.response.status === 422) {
           _this2.errors = error.response.data.errors;
+          _this2.submitting = false;
         }
       });
     }
@@ -20839,8 +20844,11 @@ var render = function() {
         _vm._v(" "),
         _c(
           "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("Save")]
+          {
+            staticClass: "btn btn-primary",
+            attrs: { type: "submit", disabled: _vm.submitting }
+          },
+          [_vm._v(_vm._s(_vm.submitting ? "Saving..." : "Save"))]
         )
       ]
     )

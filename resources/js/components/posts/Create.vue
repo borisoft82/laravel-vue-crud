@@ -29,7 +29,7 @@
             {{ errors.category_id[0] }}
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" :disabled="submitting">{{ submitting ? 'Saving...' : 'Save'}}</button>
       </form>
   </div>
 </template>
@@ -45,7 +45,8 @@
           text: '',
           category_id: ''
         },
-        errors: {}
+        errors: {},
+        submitting: false
       }
     },
 
@@ -58,12 +59,15 @@
 
     methods: {
       savePost() {
+        this.submitting = true;
         axios.post('api/posts', this.fields)
           .then(response => {
             this.$router.push('/');
+            this.submitting = false;
         }).catch(error => {
           if(error.response.status === 422) {
             this.errors = error.response.data.errors;
+            this.submitting = false;
           }
         })
       }
