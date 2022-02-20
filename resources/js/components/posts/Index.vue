@@ -46,7 +46,10 @@
             <td>{{post.created_at}}</td>
             <td>{{post.updated_at}}</td>
             <td>{{post.category_name}}</td>
-            <td><router-link :to="{ name: 'posts.edit', params: { id: post.id} }">Edit</router-link></td>
+            <td>
+              <router-link class="btn btn-info btn-sm" :to="{ name: 'posts.edit', params: { id: post.id} }"><i class="bi bi-pencil-square"></i></router-link>
+              <button @click="deletePost(post.id)" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+              </td>
           </tr>
         </tbody>
       </table>
@@ -109,6 +112,31 @@
         this.sort_order = 'asc';
       }
       this.getResults();
+    },
+
+    deletePost(post_id) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: "You won't be able to revert post!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if(result.value) {
+          axios.delete('/api/posts/' + post_id)
+          .then(response => {
+            this.$swal('Post deleted successfully');
+            this.getResults();
+        }).catch(error => {
+              this.$swal({
+                icon: 'error',
+                title: 'Validation error'
+            });
+          })
+        }
+      })
     }
   }
 }
